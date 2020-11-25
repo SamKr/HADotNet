@@ -35,6 +35,8 @@ namespace HADotNet.Core
         /// <returns>The deserialized data of type <typeparamref name="T" />.</returns>
         protected async Task<T> Get<T>(string path) where T : class
         {
+            if (ClientFactory.UseCurl) return await CurlClient.Get<T>(path);
+
             var req = new RestRequest(path);
             var resp = await Client.ExecuteGetAsync(req);
 
@@ -49,7 +51,9 @@ namespace HADotNet.Core
                 return JsonConvert.DeserializeObject<T>(resp.Content);
             }
 
-            throw new Exception($"Unexpected response code {(int)resp.StatusCode} from Home Assistant API endpoint {path}.");
+            throw new Exception($"Unexpected response code {(int)resp.StatusCode} from Home Assistant API endpoint {path}." +
+                                $"\r\nContent: [{resp.Content}]" +
+                                $"\r\nError: {resp.ErrorMessage}");
         }
 
         /// <summary>

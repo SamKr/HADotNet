@@ -7,8 +7,9 @@ namespace HADotNet.Core
     /// </summary>
     public static class ClientFactory
     {
-        private static Uri InstanceAddress { get; set; }
-        private static string ApiKey { get; set; }
+        internal static Uri InstanceAddress { get; set; }
+        internal static string ApiKey { get; set; }
+        internal static bool UseCurl { get; set; }
 
         /// <summary>
         /// Gets whether or not the Client Factory has been initialized.
@@ -20,10 +21,12 @@ namespace HADotNet.Core
         /// </summary>
         /// <param name="instanceAddress">The Home Assistant base instance address (do not include /api/).</param>
         /// <param name="apiKey">The Home Assistant long-lived access token.</param>
-        public static void Initialize(Uri instanceAddress, string apiKey)
+        /// <param name="useCurl">Activates the use of curl instead of RestSharp (requires curl to be accessible through PATH)</param>
+        public static void Initialize(Uri instanceAddress, string apiKey, bool useCurl = false)
         {
             InstanceAddress = instanceAddress;
             ApiKey = apiKey;
+            UseCurl = useCurl;
             IsInitialized = true;
         }
 
@@ -32,7 +35,8 @@ namespace HADotNet.Core
         /// </summary>
         /// <param name="instanceAddress">The Home Assistant base instance address (do not include /api/).</param>
         /// <param name="apiKey">The Home Assistant long-lived access token.</param>
-        public static void Initialize(string instanceAddress, string apiKey) => Initialize(new Uri(instanceAddress), apiKey);
+        /// <param name="useCurl">Activates the use of curl instead of RestSharp (requires curl to be accessible through PATH)</param>
+        public static void Initialize(string instanceAddress, string apiKey, bool useCurl = false) => Initialize(new Uri(instanceAddress), apiKey, useCurl);
 
         /// <summary>
         /// Resets the Client Factory to its initial state (not initialized).
@@ -41,6 +45,7 @@ namespace HADotNet.Core
         {
             InstanceAddress = null;
             ApiKey = null;
+            UseCurl = false;
             IsInitialized = false;
         }
 

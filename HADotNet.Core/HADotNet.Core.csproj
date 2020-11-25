@@ -32,7 +32,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="RestSharp" Version="106.11.4" />
+    <PackageReference Include="CliWrap" Version="3.2.3" />
+    <PackageReference Include="RestSharp" Version="106.11.7" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 </Project>
